@@ -1,0 +1,80 @@
+//##success_test
+import "../ustlib/string.u"
+import "../ustlib/unordered_set.u"
+
+fn U_Main() : i32
+{
+	{ // set with one value
+		var ust::unordered_set</ i32 /> mut m;
+		halt if( ! m.empty() );
+
+		m.insert( 55 );
+		halt if( m.size() != size_type(1) );
+		halt if( m.count(55) != size_type(1) );
+
+		m.clear();
+		halt if( !m.empty() );
+		halt if( m.count(55) != size_type(0) );
+	}
+	{ // set of ints
+		var ust::unordered_set</ i32 /> mut m;
+
+		m.insert(   58 );
+		m.insert(    1 );
+		m.insert(   45 );
+		m.insert( 1256 );
+		m.insert( 1997 );
+
+		halt if( m.count(   58 ) != size_type(1) );
+		halt if( m.count(    1 ) != size_type(1) );
+		halt if( m.count(   45 ) != size_type(1) );
+		halt if( m.count( 1256 ) != size_type(1) );
+		halt if( m.count( 1997 ) != size_type(1) );
+
+		m.drop(    1 ); halt if( m.count(    1 ) != size_type(0) );
+		m.drop(   45 ); halt if( m.count(   45 ) != size_type(0)  );
+		m.drop( 1997 ); halt if( m.count( 1997 ) != size_type(0)  );
+		m.drop( 1256 ); halt if( m.count( 1256 ) != size_type(0)  );
+		m.drop(   58 ); halt if( m.count(   58 ) != size_type(0)  );
+		halt if( m.size() != size_type(0) );
+	}
+	{ // set of strings
+		var ust::unordered_set</ ust::string8 /> mut m;
+
+		m.insert( "adr"     );
+		m.insert( "apple"   );
+		m.insert( "empress" );
+		m.insert( "__A"     );
+		m.insert( "Zw"      );
+
+		halt if( m.count( "adr"     ) != size_type(1) );
+		halt if( m.count( "apple"   ) != size_type(1) );
+		halt if( m.count( "empress" ) != size_type(1) );
+		halt if( m.count( "__A"     ) != size_type(1) );
+		halt if( m.count( "Zw"      ) != size_type(1) );
+
+		m.drop( "empress" ); halt if( m.count( "empress" ) != size_type(0) );
+		m.drop( "apple"   ); halt if( m.count( "apple"   ) != size_type(0)  );
+		m.drop( "Zw"      ); halt if( m.count( "Zw"      ) != size_type(0)  );
+		m.drop( "__A"     ); halt if( m.count( "__A"     ) != size_type(0)  );
+		m.drop( "adr"     ); halt if( m.count( "adr"     ) != size_type(0)  );
+		halt if( m.size() != size_type(0) );
+	}
+	{ // "insert" of existent value do not icreases size.
+		var ust::unordered_set</ ust::string8 /> mut m;
+		m.insert( "a" );
+		halt if( m.size() != size_type(1) );
+		m.insert( "012" );
+		halt if( m.size() != size_type(2) );
+		m.insert( "221" );
+		halt if( m.size() != size_type(3) );
+		m.insert( "012" );
+		halt if( m.size() != size_type(3) );
+		m.insert( "abbbb" );
+		halt if( m.size() != size_type(4) );
+		m.drop( "012" );
+		halt if( m.size() != size_type(3) );
+	}
+
+	return 0;
+}
